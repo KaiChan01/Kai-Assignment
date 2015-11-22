@@ -20,21 +20,34 @@ void setup()
   int start;
   
   //Used to draw the Xand Y axis for barchart
+  int smallSpace;
   int space;
   int axisSize;
+  int gap;
   
   //Declaring 2 2D arrays to store the data
   float[][] pacData = new float[rounds][dataNum]; 
   float[][] marqData = new float[rounds][dataNum];
   
+  //Colour for both fighters
+  color pacRed;
+  color marqBlue;
 
 void draw()
 {
+  pacRed = color(255,0,0);
+  marqBlue = color(0,0,255);
+  
   //Declaring some values
   rounds = 12;
   dataNum = 4;
+  
+  //Space is for the distance from the edge of the window
   space = width/10;
+  smallSpace = space/10;  
+  //Size of the x and Y axis
   axisSize = width - space - space;
+  gap = axisSize/10;
   
   //This will make the data to be read in once
   do
@@ -51,41 +64,65 @@ void draw()
     //Title
     textSize(width/20);
     fill(255,0,0);
-    text("Pacquiao vs Marquez 3", int(width/5) , 50);
+    textAlign(CENTER);
+    text("Pacquiao vs Marquez 3", width/2 , space);
     
     //Drawing a box with text in it
     
     stroke(255);
     fill(0);
-    rect(width/5,height/2,3*(width/5),height/2-50);
+    rect(width/5,height/2,3*(width/5),height/2-space);
     
     //Option 1
-
     textSize(width/31);
     fill(255);
-    text("1. Barchart displaying total number \nof punches thrown by both fighters.",int(width/5+10),height/2+20);
+    text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/2+(4*smallSpace));
+    
+    //Option 2
+    text("2. A Pie Chart showing the types of \npunches landed/thrown between \nboth fighters.",width/2,height/2+(16*smallSpace));
   }
   
   //Draw barchart
   if(input == 1)
   {
+    //Size for box
+    int boxes = space/5;
     
     //X and Y axis drawn
     background(0);
     line(space,height-space,width-space,height-space);
     line(space,height-space,space,space);
     fill(255);
-    text("0",space-40,height-space);
+    text("0",space-gap,height-space);
+    textAlign(CENTER);
+    text("Press B to return to the menu",width/2,space);
     
+    //drawing boxes on to show colours which represent fighters
+    fill(pacRed);
+    textAlign(LEFT);
+    text("Pacquiao",width-(2*space)+boxes+smallSpace,2*boxes);
+    rect(width-2*space,boxes,boxes,boxes);
+    
+    fill(marqBlue);
+    textAlign(LEFT);
+    text("Marquez",width-(2*space)+boxes+smallSpace,5*boxes);
+    rect(width-2*space,4*boxes,boxes,boxes);
+    
+    //Drawing the little lines on the graph
     int numbers = 100;
     for(int i = 0; i < 10; i++)
     {
-      line(space,space+(40*i),space-10,space+(40*i));
+      line(space,space+(gap*i),space-10,space+(gap*i));
       fill(255);
-      text(numbers,space-40, space+(40*i));
+      text(numbers,space-gap, space+(gap*i));
       numbers -= 10;
     }
     
+    for(int i = 0; i < rounds; i++)
+    {
+      text(i+1,(space/10)+space+(axisSize/12)*i,height-(space/2));
+    }
+
     showPac();
     showMarq();
   }
@@ -97,33 +134,30 @@ void draw()
 }
 
 
-
-
 void showPac()
 {
-  int barSize = 10;
+  int barSize = width/50;
   space = width/10;
   
   for(int i = 0; i < rounds; i++)
   {
-    fill(255,0,0);
-    //almost there
+    fill(pacRed);
     rect(space+(axisSize/12)*i,height-space,barSize,-map(pacData[i][3],0,100,0,axisSize));
   }
 }
 
 void showMarq()
 {
-  int barSize = 10;
+  int barSize = width/50;
   space = (width/10);
   
   for(int i = 0; i < rounds; i++)
   {
-    fill(0,0,255);
-    //almost there
+    fill(marqBlue);
     rect(barSize+space+(axisSize/12)*i,height-space,barSize,-map(marqData[i][3],0,100,0,axisSize));
   }
 }
+
 
 //Function to read Pac's data
 float[][] readPac()
