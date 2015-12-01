@@ -9,14 +9,28 @@ void setup()
   input = 0;
   //This lets the program to read the data once
   start = 0;
+  jab = 0;
+  strong = 1;
+  hit = 2;
+  total = 3;
+  pieRound = 0;
 }
 
+  //To avoid hard coding when accessing the array of DATA
+  int pieRound;
+  int jab;
+  int strong;
+  int hit;
+  int total;
+  
   //Gobal variables
+  
   int rounds;
   //There are 4 columns of data to be stored
   int dataNum; 
   //This variable is for storing user inputs
   int input = 0;
+  
   int start;
   
   //Used to draw the Xand Y axis for barchart
@@ -79,14 +93,14 @@ void draw()
     text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/2+(4*smallSpace));
     
     //Option 2
-    text("2. A Pie Chart showing the types of \npunches landed/thrown between \nboth fighters.",width/2,height/2+(16*smallSpace));
+    text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/2+(16*smallSpace));
   }
   
   //Draw barchart
   if(input == 1)
   {
-    //Size for box
-    int boxes = space/5;
+    stroke(255);
+    fill(0);
     
     //X and Y axis drawn
     background(0);
@@ -96,17 +110,6 @@ void draw()
     text("0",space-gap,height-space);
     textAlign(CENTER);
     text("Press B to return to the menu",width/2,space);
-    
-    //drawing boxes on to show colours which represent fighters
-    fill(pacRed);
-    textAlign(LEFT);
-    text("Pacquiao",width-(2*space)+boxes+smallSpace,2*boxes);
-    rect(width-2*space,boxes,boxes,boxes);
-    
-    fill(marqBlue);
-    textAlign(LEFT);
-    text("Marquez",width-(2*space)+boxes+smallSpace,5*boxes);
-    rect(width-2*space,4*boxes,boxes,boxes);
     
     //Drawing the little lines on the graph
     int numbers = 100;
@@ -122,17 +125,118 @@ void draw()
     {
       text(i+1,(space/10)+space+(axisSize/12)*i,height-(space/2));
     }
-
+    
+    boxes();
     showPac();
     showMarq();
   }
   
   //Draw piechart
-  if(input == 2 )
+  if(input == 2)
   {
+    background(0);
+    drawPie(pieRound);
+    boxes();
   }  
 }
 
+//Drawing a piechart
+void drawPie(int input)
+{
+  String title[] = {"Jabs", "Power Punches", "Missed"};
+  
+  float addUp = 0;
+  int radius = 300;
+  int r = radius / 2;
+  float cx, cy;
+  cx = cy = width/2;
+  //Starting angle is so it starts at the top
+  float startAngle = PI+(PI/2);
+  float last = startAngle;
+  
+  float totalPunches = pacData[input][total] + marqData[input][total];  
+  
+  //Outer Pie Charts
+  stroke(0);
+  fill(pacRed);
+  //Drawing pac's section
+  for(int i = 0; i<total; i++)
+  {
+    if(i != hit)
+    {
+      addUp += pacData[input][i]; 
+    }
+    else
+    {
+      //This is to calculate the punches missed
+      addUp += (pacData[input][total]-pacData[input][hit]);
+    }
+    
+    float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+    arc(cx,cy,radius,radius,last,section);
+    
+    last = section;
+  }  
+  
+  stroke(0);
+  fill(marqBlue);
+  //Darwing Marq's pie
+  for(int i=hit;i>-1;i--)
+  {
+    if(i != hit)
+    {
+      addUp += marqData[input][i]; 
+    }
+    else
+    {
+      //This is to calculate the punches missed
+      addUp += (marqData[input][total]-marqData[input][hit]);
+      println(addUp);
+    }
+    
+     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+    arc(cx,cy,radius,radius,last,section);
+    
+    last = section;
+  }  
+  
+  
+    //Inner Pie charts
+    stroke(0);
+    fill(pacRed);
+    addUp += pacData[input][total];
+    float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+    arc(cx,cy,r,r,last,section);
+    last = section;
+    
+        stroke(0);
+    fill(marqBlue);
+    addUp += marqData[input][total];
+    section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+    arc(cx,cy,r,r,last,section);
+    last = section;
+}
+
+
+//Drawing boxes for each fighter
+void boxes()
+{
+  
+   //Size for the boxes
+   int boxes = space/5;
+   
+   //drawing boxes on to show colours which represent fighters
+   stroke(255);
+   fill(pacRed);
+   textAlign(LEFT);
+   text("Pacquiao",width-(2*space)+boxes+smallSpace,2*boxes);
+   rect(width-2*space,boxes,boxes,boxes);
+    
+   fill(marqBlue);
+   textAlign(LEFT);
+   text("Marquez",width-(2*space)+boxes+smallSpace,5*boxes);
+   rect(width-2*space,4*boxes,boxes,boxes);
+}
 
 void showPac()
 {
@@ -238,6 +342,22 @@ float[][] readPac()
      if(key == '2')
      {
        input = 2;
+     }
+     
+     if(key == '.')
+     {
+       if(pieRound < 11)
+       {
+         pieRound++;
+       }
+     }
+     
+     if(key == ',')
+     {
+       if(pieRound > 0)
+       {
+         pieRound--;
+       }
      }
    }
  }
