@@ -5,33 +5,44 @@
 void setup()
 { 
   size(500,500);
+  //Accessing classes
+  pac = new Pacquiao();
+  marq = new Marquez();
+  
   //This is here to bring up the menu
   input = 0;
-  //This lets the program to read the data once
-  start = 0;
-  jab = 0;
+  jabs = 0;
   strong = 1;
-  hit = 2;
-  total = 3;
-  pieRound = 0;
+  totalJabs = 2;
+  totalPower = 3;
+  total = 4;
+  round = 0;
+  dataNum = 5;
+  rounds = 12;
+  
+  pacRed = color(255,0,0);
+  marqBlue = color(0,0,255);
 }
 
+  Pacquiao pac;
+  Marquez marq;
+  
   //To avoid hard coding when accessing the array of DATA
   int pieRound;
-  int jab;
+  int jabs;
   int strong;
-  int hit;
+  int totalJabs;
+  int totalPower;
   int total;
+  int round;
   
   //Gobal variables
   
   int rounds;
-  //There are 4 columns of data to be stored
+  //There are 5 columns of data to be stored
   int dataNum; 
   //This variable is for storing user inputs
-  int input = 0;
-  
-  int start;
+  int input;
   
   //Used to draw the Xand Y axis for barchart
   int smallSpace;
@@ -39,37 +50,18 @@ void setup()
   int axisSize;
   int gap;
   
-  //Declaring 2 2D arrays to store the data
-  float[][] pacData = new float[rounds][dataNum]; 
-  float[][] marqData = new float[rounds][dataNum];
-  
   //Colour for both fighters
   color pacRed;
   color marqBlue;
 
 void draw()
 {
-  pacRed = color(255,0,0);
-  marqBlue = color(0,0,255);
-  
-  //Declaring some values
-  rounds = 12;
-  dataNum = 4;
   
   //Space is for the distance from the edge of the window
   space = width/10;
-  smallSpace = space/10;  
-  //Size of the x and Y axis
+  smallSpace = space/10;
   axisSize = width - space - space;
   gap = axisSize/10;
-  
-  //This will make the data to be read in once
-  do
-  {
-    pacData = readPac();
-    marqData = readMarq();
-    start++;
-  }while(start<1);
   
   //Drawing a menu
   if(input == 0)
@@ -99,129 +91,59 @@ void draw()
   //Draw barchart
   if(input == 1)
   {
-    stroke(255);
-    fill(0);
-    
-    //X and Y axis drawn
-    background(0);
-    line(space,height-space,width-space,height-space);
-    line(space,height-space,space,space);
-    fill(255);
-    text("0",space-gap,height-space);
-    textAlign(CENTER);
-    text("Press B to return to the menu",width/2,space);
-    
-    //Drawing the little lines on the graph
-    int numbers = 100;
-    for(int i = 0; i < 10; i++)
-    {
-      line(space,space+(gap*i),space-10,space+(gap*i));
-      fill(255);
-      text(numbers,space-gap, space+(gap*i));
-      numbers -= 10;
-    }
-    
-    for(int i = 0; i < rounds; i++)
-    {
-      text(i+1,(space/10)+space+(axisSize/12)*i,height-(space/2));
-    }
+    drawingGraph();
     
     boxes();
-    showPac();
-    showMarq();
+    
+    //Pac's bars
+    for(int i = 0;i<rounds;i++)
+    {
+      pac.x=space+((axisSize/rounds)*i);
+      pac.y=space;
+      pac.i= i;
+      pac.graphSize=axisSize;
+      pac.bar();
+    }
+    
+    //Marq's bars
+    for(int i = 0;i<rounds;i++)
+    {
+      marq.x=space+((axisSize/rounds)*i);
+      marq.y=space;
+      marq.i= i;
+      marq.graphSize=axisSize;
+      marq.bar();
+    }
+    
+    barfeature();
   }
   
   //Draw piechart
   if(input == 2)
   {
+    //Display for option 2
+    textAlign(CENTER);
+    
     background(0);
-    drawPie(pieRound);
+    fill(255);
+    text("Round", width/2, 40);
+    text(round+1, width/2, 60);
+    
+    
+    pac.round = round;
+    pac.pie();
+    
+    marq.round = round;
+    marq.pie();
+    
     boxes();
   }  
-}
-
-//Drawing a piechart
-void drawPie(int input)
-{
-  String title[] = {"Jabs", "Power Punches", "Missed"};
-  
-  float addUp = 0;
-  int radius = 300;
-  int r = radius / 2;
-  float cx, cy;
-  cx = cy = width/2;
-  //Starting angle is so it starts at the top
-  float startAngle = PI+(PI/2);
-  float last = startAngle;
-  
-  float totalPunches = pacData[input][total] + marqData[input][total];  
-  
-  //Outer Pie Charts
-  stroke(0);
-  fill(pacRed);
-  //Drawing pac's section
-  for(int i = 0; i<total; i++)
-  {
-    if(i != hit)
-    {
-      addUp += pacData[input][i]; 
-    }
-    else
-    {
-      //This is to calculate the punches missed
-      addUp += (pacData[input][total]-pacData[input][hit]);
-    }
-    
-    float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-    arc(cx,cy,radius,radius,last,section);
-    
-    last = section;
-  }  
-  
-  stroke(0);
-  fill(marqBlue);
-  //Darwing Marq's pie
-  for(int i=hit;i>-1;i--)
-  {
-    if(i != hit)
-    {
-      addUp += marqData[input][i]; 
-    }
-    else
-    {
-      //This is to calculate the punches missed
-      addUp += (marqData[input][total]-marqData[input][hit]);
-      println(addUp);
-    }
-    
-     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-    arc(cx,cy,radius,radius,last,section);
-    
-    last = section;
-  }  
-  
-  
-    //Inner Pie charts
-    stroke(0);
-    fill(pacRed);
-    addUp += pacData[input][total];
-    float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-    arc(cx,cy,r,r,last,section);
-    last = section;
-    
-        stroke(0);
-    fill(marqBlue);
-    addUp += marqData[input][total];
-    section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-    arc(cx,cy,r,r,last,section);
-    last = section;
 }
 
 
 //Drawing boxes for each fighter
 void boxes()
 {
-  
    //Size for the boxes
    int boxes = space/5;
    
@@ -238,92 +160,52 @@ void boxes()
    rect(width-2*space,4*boxes,boxes,boxes);
 }
 
-void showPac()
+void drawingGraph()
 {
-  int barSize = width/50;
-  space = width/10;
-  
-  for(int i = 0; i < rounds; i++)
-  {
-    fill(pacRed);
-    rect(space+(axisSize/12)*i,height-space,barSize,-map(pacData[i][3],0,100,0,axisSize));
-  }
+  int numbers = 100;
+    stroke(255);
+    fill(0);
+    
+    //X and Y axis drawn
+    background(0);
+    line(space,height-space,width-space,height-space);
+    line(space,height-space,space,space);
+    fill(255);
+    text("0",space-gap,height-space);
+    textAlign(CENTER);
+    text("Press B to return to the menu",width/2,space);
+    text("<----Rounds---->",width/2, height-10);
+    
+    textAlign(LEFT);
+    //Drawing the little lines on the graph
+    for(int i = 0; i < 10; i++)
+    {
+      line(space,space+(gap*i),space-10,space+(gap*i));
+      fill(255);
+      text(numbers,space-gap, space+(gap*i));
+      numbers -= 10;
+    }
+    
+    for(int i = 0; i < rounds; i++)
+    {
+      text(i+1,(space/10)+space+(axisSize/rounds)*i,height-(space/2));
+    }
 }
 
-void showMarq()
+void barfeature()
 {
-  int barSize = width/50;
-  space = (width/10);
+  int lineDigit;
   
-  for(int i = 0; i < rounds; i++)
+  if(mouseY > space && mouseY < space+axisSize)
   {
-    fill(marqBlue);
-    rect(barSize+space+(axisSize/12)*i,height-space,barSize,-map(marqData[i][3],0,100,0,axisSize));
+    println(mouseY);
+    stroke(200,255,200);
+    line(0, mouseY,width,mouseY);
+    lineDigit = int(map(height-mouseY-space, 0, axisSize,0, 100));
+  
+    text(lineDigit,width-space,mouseY);
   }
 }
-
-
-//Function to read Pac's data
-float[][] readPac()
-{  
-  rounds = 12;
-  dataNum = 4;
-  
-  ArrayList<Float> pac = new ArrayList<Float>();
-  //ArrayList<Float> marq = new ArrayList<float>();
-  
-  //Creating a 2d array
-  float[][] f = new float[rounds][dataNum];
-  
-  //loading csv file
-  String[] score = loadStrings("pac.csv");
-  int row = 0;
-  
-  for(String p:score)
-  {
-    // line one is stored in here now e.g 2 2 2 2
-    String[] temp = split(p, ","); 
-    
-    for(int i = 0; i<dataNum;i++)
-    {
-      f[row][i] = Float.parseFloat(temp[i]);
-    }
-    row++;
-  }
-  
-  return f;
- }
- 
- 
- //Function to read marq's data
- float[][] readMarq()
-{  
-  rounds = 12;
-  dataNum = 4;
-  
-  ArrayList<Float> marq = new ArrayList<Float>();
-  
-  //Creating a 2d array
-  float[][] f = new float[rounds][dataNum];
-  
-  //loading csv file
-  String[] score = loadStrings("marq.csv");
-  int row = 0;
-  
-  for(String p:score)
-  {
-    // line one is stored in here now e.g 2 2 2 2
-    String[] temp = split(p, ",");
-    
-    for(int i = 0; i<dataNum;i++)
-    {
-      f[row][i] = Float.parseFloat(temp[i]);
-    }
-    row++;
-  }
-  
-  return f;
- }
  
  void keyPressed()
  {
@@ -346,17 +228,17 @@ float[][] readPac()
      
      if(key == '.')
      {
-       if(pieRound < 11)
+       if(round < 11)
        {
-         pieRound++;
+         round++;
        }
      }
      
      if(key == ',')
      {
-       if(pieRound > 0)
+       if(round > 0)
        {
-         pieRound--;
+         round--;
        }
      }
    }
