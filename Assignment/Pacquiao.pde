@@ -14,6 +14,8 @@ class Pacquiao extends Fight
   float cx, cy;
   float last;
   color[] gradient = new color[total];
+  float mouseAngleX;
+  float mouseAngleY;
   
   Pacquiao()
   {
@@ -32,7 +34,7 @@ class Pacquiao extends Fight
     corner = color(255,0,0);
     position = 0;
     //I want the radius to be 300
-    radius = (width/5)*3;
+    radius = width/2;
     r = radius/2;
     cx = cy = width/2;
     startAngle = PI+(PI/2);
@@ -46,9 +48,18 @@ class Pacquiao extends Fight
    
    void pie()
    {
-     totalPunches = pacData[round][total] + marqData[round][total];
-     println(totalPunches);
+     mouseAngleX = mouseX - cx;
+     mouseAngleY = mouseY - cy;
      
+     float mouseAngle = atan2(mouseAngleY, mouseAngleX);
+     
+     if(mouseAngle<0)
+     {
+       mouseAngle = map(mouseAngle, -PI,0,PI,TWO_PI);
+     }
+     
+     totalPunches = pacData[round][total] + marqData[round][total];
+
      last = startAngle;
      addUp = 0;
      stroke(0);
@@ -76,10 +87,46 @@ class Pacquiao extends Fight
           }
          }
         }
-      float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-      arc(cx,cy,radius,radius,last,section,PIE);
-      last = section;
+        
+        float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+        //Bottom half < > top half
+        if( (mouseAngle+PI > last-PI && mouseAngle+PI < section-PI) || (mouseAngle > last && mouseAngle < section))
+        {
+          radius = 325;
+        }
+        else
+        {
+          radius = width/2;
+        }
+        println("angle"+ (mouseAngle+PI));
+        println(i,section);
+        
+        arc(cx,cy,radius,radius,last,section,PIE);
+        
+        fill(255);
+        if(radius != width/2)
+        {
+          if(i==0)
+          {
+            text(int(pacData[round][jabs])+" Jabs landed",mouseX,mouseY);
+          }
+          if(i == 1)
+          {
+            text(int(pacData[round][strong])+" Power Punches landed",mouseX,mouseY);
+          }
+          if(i==2)
+          {
+            text(int(pacData[round][totalJabs]-pacData[round][jabs])+" Jabs missed",mouseX,mouseY);
+          }
+          if(i == 3)
+          {
+            text(int(pacData[round][totalPower]-pacData[round][strong])+" Power Punches missed",mouseX,mouseY);
+          }
+        }
+        println(i,last);
+        last = section;
      }
+        
      
      addUp=0;
      last = startAngle;

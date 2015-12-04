@@ -14,7 +14,8 @@ class Marquez extends Fight
   float last;
   float startAngle;
   color[] gradient = new color[total];
-  
+  float mouseAngleX;
+  float mouseAngleY;
   
   Marquez()
   {
@@ -33,7 +34,7 @@ class Marquez extends Fight
     position = 1;
     corner = color(0,0,255);
     //radius = 300
-    radius = (width/5)*3;
+    radius = width/2;
     r = radius/2;
     cx = cy = width/2;
     startAngle = (PI/2);
@@ -47,6 +48,15 @@ class Marquez extends Fight
    
    void pie()
    {
+     mouseAngleX = mouseX - cx;
+     mouseAngleY = mouseY - cy;
+     
+     float mouseAngle = atan2(mouseAngleX, mouseAngleY);
+     if(mouseAngle<0)
+     {
+       mouseAngle = map(mouseAngle, -PI,0,PI,TWO_PI);
+     }
+     
      totalPunches = pacData[round][total] + marqData[round][total];
      
      last = startAngle;
@@ -76,6 +86,19 @@ class Marquez extends Fight
          }
         }
       float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+      if( (mouseAngle > last+startAngle  && mouseAngle < section+startAngle ))
+        {
+          radius = 325;
+        }
+        else
+        {
+          radius = width/2;
+        }
+        
+        println(mouseAngle);
+        println(i,section);
+        println(i,last);
+      
       arc(cx,cy,radius,radius,(TWO_PI-section),TWO_PI-last,PIE);
       last = section;
      }

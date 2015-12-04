@@ -11,13 +11,8 @@ void setup()
   
   //This is here to bring up the menu
   input = 0;
-  jabs = 0;
-  strong = 1;
-  totalJabs = 2;
-  totalPower = 3;
-  total = 4;
+  
   round = 0;
-  dataNum = 5;
   rounds = 12;
   
   pacRed = color(255,0,0);
@@ -27,20 +22,10 @@ void setup()
   Pacquiao pac;
   Marquez marq;
   
-  //To avoid hard coding when accessing the array of DATA
-  int pieRound;
-  int jabs;
-  int strong;
-  int totalJabs;
-  int totalPower;
-  int total;
+  //To avoid hard coding when accessing the array of DATA2
   int round;
-  
-  //Gobal variables
-  
   int rounds;
-  //There are 5 columns of data to be stored
-  int dataNum; 
+  
   //This variable is for storing user inputs
   int input;
   
@@ -162,7 +147,8 @@ void boxes()
 
 void drawingGraph()
 {
-  int numbers = 100;
+    //For populating the Y axis
+    int numbers = 100;
     stroke(255);
     fill(0);
     
@@ -170,9 +156,12 @@ void drawingGraph()
     background(0);
     line(space,height-space,width-space,height-space);
     line(space,height-space,space,space);
+    
+    //Some text
     fill(255);
     text("0",space-gap,height-space);
     textAlign(CENTER);
+    text("TOTAL PUNCHES PER ROUND",width/2, space/2);
     text("Press B to return to the menu",width/2,space);
     text("<----Rounds---->",width/2, height-10);
     
@@ -200,9 +189,10 @@ void barfeature()
   {
     println(mouseY);
     stroke(200,255,200);
+    fill(200,255,200);
     line(0, mouseY,width,mouseY);
     lineDigit = int(map(height-mouseY-space, 0, axisSize,0, 100));
-  
+    
     text(lineDigit,width-space,mouseY);
   }
 }
