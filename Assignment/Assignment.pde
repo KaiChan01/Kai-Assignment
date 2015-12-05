@@ -8,6 +8,7 @@ void setup()
   //Accessing classes
   pac = new Pacquiao();
   marq = new Marquez();
+  minim = new Minim(this);
   
   //This is here to bring up the menu
   input = 0;
@@ -17,7 +18,13 @@ void setup()
   
   pacRed = color(255,0,0);
   marqBlue = color(0,0,255);
+  img = loadImage("background.jpg");
+  select = minim.loadFile ("select.wav");
+  navRound = minim.loadFile ("round.wav");
 }
+
+  import ddf.minim.*;
+  Minim minim;
 
   Pacquiao pac;
   Marquez marq;
@@ -38,6 +45,10 @@ void setup()
   //Colour for both fighters
   color pacRed;
   color marqBlue;
+  
+  PImage img;
+  AudioPlayer select;
+  AudioPlayer navRound;
 
 void draw()
 {
@@ -51,7 +62,7 @@ void draw()
   //Drawing a menu
   if(input == 0)
   {
-    background(0);
+    background(img);
     //Title
     textSize(width/20);
     fill(255,0,0);
@@ -62,15 +73,15 @@ void draw()
     
     stroke(255);
     fill(0);
-    rect(width/5,height/2,3*(width/5),height/2-space);
+    rect(width/5,space*2,3*(width/5),height/2-(space*2));
     
     //Option 1
     textSize(width/31);
     fill(255);
-    text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/2+(4*smallSpace));
+    text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/4);
     
     //Option 2
-    text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/2+(16*smallSpace));
+    text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/3+20);
   }
   
   //Draw barchart
@@ -91,7 +102,7 @@ void draw()
     }
     
     //Marq's bars
-    for(int i = 0;i<rounds;i++)
+    for(int i = 0; i < rounds;i++)
     {
       marq.x=space+((axisSize/rounds)*i);
       marq.y=space;
@@ -111,9 +122,10 @@ void draw()
     
     background(0);
     fill(255);
-    text("Round", width/2, 40);
-    text(round+1, width/2, 60);
-    
+    text("Round", width/2, height/10);
+    text(round+1, width/2, height/10+(height/25));
+    textAlign(LEFT);
+    text("Press B for menu\n\nUse '<' and '>' key \nto change rounds",10,space/2);
     
     pac.round = round;
     pac.pie();
@@ -162,7 +174,7 @@ void drawingGraph()
     text("0",space-gap,height-space);
     textAlign(CENTER);
     text("TOTAL PUNCHES PER ROUND",width/2, space/2);
-    text("Press B to return to the menu",width/2,space);
+    text("Press B for menu",width/2,space);
     text("<----Rounds---->",width/2, height-10);
     
     textAlign(LEFT);
@@ -203,31 +215,41 @@ void barfeature()
    {
      if(key == 'b')
      {
+       select.rewind();
+       select.play();
        input = 0;
      }
      
      if(key == '1')
      {
+       select.rewind();
+       select.play();
        input = 1;
      }
    
      if(key == '2')
      {
+       select.rewind();
+       select.play();
        input = 2;
      }
      
-     if(key == '.')
+     if(input == 2 && key == '.' || input == 2 && key == '>')
      {
        if(round < 11)
        {
+         navRound.rewind();
+         navRound.play();
          round++;
        }
      }
      
-     if(key == ',')
+     if(input == 2 && key == ',' || input == 2 && key == '<')
      {
        if(round > 0)
        {
+         navRound.rewind();
+         navRound.play();
          round--;
        }
      }

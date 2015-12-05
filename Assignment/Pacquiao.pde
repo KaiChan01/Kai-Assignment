@@ -92,38 +92,35 @@ class Pacquiao extends Fight
         //Bottom half < > top half
         if( (mouseAngle+PI > last-PI && mouseAngle+PI < section-PI) || (mouseAngle > last && mouseAngle < section))
         {
-          radius = 325;
+          radius = radius+(radius/4);
         }
         else
         {
           radius = width/2;
         }
-        println("angle"+ (mouseAngle+PI));
-        println(i,section);
         
         arc(cx,cy,radius,radius,last,section,PIE);
         
-        fill(255);
+        textAlign(CENTER);
         if(radius != width/2)
         {
           if(i==0)
           {
-            text(int(pacData[round][jabs])+" Jabs landed",mouseX,mouseY);
+            text(int(pacData[round][jabs])+" Jabs landed",width/2,height-space/2);
           }
           if(i == 1)
           {
-            text(int(pacData[round][strong])+" Power Punches landed",mouseX,mouseY);
+            text(int(pacData[round][strong])+" Power Punches landed",width/2,height-space/2);
           }
           if(i==2)
           {
-            text(int(pacData[round][totalJabs]-pacData[round][jabs])+" Jabs missed",mouseX,mouseY);
+            text(int(pacData[round][totalJabs]-pacData[round][jabs])+" Jabs missed",width/2,height-space/2);
           }
           if(i == 3)
           {
-            text(int(pacData[round][totalPower]-pacData[round][strong])+" Power Punches missed",mouseX,mouseY);
+            text(int(pacData[round][totalPower]-pacData[round][strong])+" Power Punches missed",width/2,height-space/2);
           }
         }
-        println(i,last);
         last = section;
      }
         
@@ -136,5 +133,10 @@ class Pacquiao extends Fight
     addUp = pacData[round][total];
     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
     arc(cx,cy,r,r,last,section,PIE);
+    
+    textAlign(RIGHT);
+    text("Total jabs: " + int(pacData[round][totalJabs]), width-10,height-(2*space));
+    text("Total PowerPunches: " + int(pacData[round][totalPower]), width-10,height-((2*space)-(space/2)));
+    text("Total Punches: " + int(pacData[round][total]), width-10,height-(space));
    }
 }

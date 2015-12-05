@@ -44,10 +44,10 @@ class Marquez extends Fight
   {
      fill(corner);
      rect((position*barSize)+x,height-y,barSize,-map(marqData[i][total], 0, 100, 0, graphSize));
-   }
+  }
    
-   void pie()
-   {
+  void pie()
+  {
      mouseAngleX = mouseX - cx;
      mouseAngleY = mouseY - cy;
      
@@ -88,19 +88,36 @@ class Marquez extends Fight
       float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
       if( (mouseAngle > last+startAngle  && mouseAngle < section+startAngle ))
         {
-          radius = 325;
+          radius = radius+(radius/4);
         }
         else
         {
           radius = width/2;
         }
-        
-        println(mouseAngle);
-        println(i,section);
-        println(i,last);
       
       arc(cx,cy,radius,radius,(TWO_PI-section),TWO_PI-last,PIE);
       last = section;
+      
+      textAlign(CENTER);
+      if(radius != width/2)
+      {
+        if(i==0)
+        {
+          text(int(marqData[round][jabs])+" Jabs landed",width/2,height-space/2);
+        }
+        if(i == 1)
+        {
+          text(int(marqData[round][strong])+" Power Punches landed",width/2,height-space/2);
+        }
+        if(i==2)
+        {
+          text(int(marqData[round][totalJabs]-marqData[round][jabs])+" Jabs missed",width/2,height-space/2);
+        }
+        if(i == 3)
+        {
+          text(int(marqData[round][totalPower]-marqData[round][strong])+" Power Punches missed",width/2,height-space/2);
+        }
+       }
      }
      
      addUp=0;
@@ -111,5 +128,10 @@ class Marquez extends Fight
     addUp = marqData[round][total];
     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
     arc(cx,cy,r,r,TWO_PI-section,TWO_PI-last,PIE);
+    
+    textAlign(LEFT);
+    text("Total jabs: " + int(marqData[round][totalJabs]), 10,height-(2*space));
+    text("Total PowerPunches: " + int(marqData[round][totalPower]), 10,height-((2*space)-(space/2)));
+    text("Total Punches: " + int(marqData[round][total]), 10,height-(space));
    }
  }
