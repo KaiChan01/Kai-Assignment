@@ -1,5 +1,6 @@
 class Pacquiao extends Fight
 {
+  //These fields are ainly for the barchart method
   int numbers;
   int barSize;
   int i;
@@ -7,6 +8,7 @@ class Pacquiao extends Fight
   int position;
   float addUp;
   
+  //These are for the pie chart method
   float startAngle;
   int round;
   int radius;
@@ -19,6 +21,7 @@ class Pacquiao extends Fight
   
   Pacquiao()
   {
+    //colours for Pac
     blue = 150;
     red = 255;
     green = 150;
@@ -124,16 +127,17 @@ class Pacquiao extends Fight
         last = section;
      }
         
-     
-     addUp=0;
-     last = startAngle;
     //Inner Pie charts
+    addUp=0;
+    last = startAngle;
     stroke(0);
     fill(corner);
     addUp = pacData[round][total];
+    
     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
     arc(cx,cy,r,r,last,section,PIE);
     
+    //Extra details for Pac
     textAlign(RIGHT);
     text("Total jabs: " + int(pacData[round][totalJabs]), width-10,height-(2*space));
     text("Total PowerPunches: " + int(pacData[round][totalPower]), width-10,height-((2*space)-(space/2)));

@@ -2,34 +2,12 @@
    Author: Ka Yu Chan
 */
 
-void setup()
-{ 
-  size(500,500);
-  //Accessing classes
-  pac = new Pacquiao();
-  marq = new Marquez();
-  minim = new Minim(this);
-  
-  //This is here to bring up the menu
-  input = 0;
-  
-  round = 0;
-  rounds = 12;
-  
-  pacRed = color(255,0,0);
-  marqBlue = color(0,0,255);
-  img = loadImage("background.jpg");
-  select = minim.loadFile ("select.wav");
-  navRound = minim.loadFile ("round.wav");
-}
-
   import ddf.minim.*;
   Minim minim;
 
   Pacquiao pac;
   Marquez marq;
   
-  float animation;
   
   //To avoid hard coding when accessing the array of DATA2
   int round;
@@ -49,8 +27,37 @@ void setup()
   color marqBlue;
   
   PImage img;
+  
+  //Declaring sounds navRound is for when changing the rounds in the pie chart
   AudioPlayer select;
   AudioPlayer navRound;
+
+void setup()
+{ 
+  size(500,500);
+  
+  //Accessing classes, making instances
+  pac = new Pacquiao();
+  marq = new Marquez();
+  minim = new Minim(this);
+  
+  //This is here to bring up the menu and user input will change the value of this
+  input = 0;
+  
+  //Setting round at 0 as defualt
+  round = 0;
+  
+  //Total number of rounds = 12 rounds
+  rounds = 12;
+  
+  pacRed = color(255,0,0);
+  marqBlue = color(0,0,255);
+  
+  //Loading some sounds and background image
+  img = loadImage("background.jpg");
+  select = minim.loadFile ("select.wav");
+  navRound = minim.loadFile ("round.wav");
+}
 
 void draw()
 {
@@ -58,7 +65,10 @@ void draw()
   //Space is for the distance from the edge of the window
   space = width/10;
   smallSpace = space/10;
+  
+  //length of the X-axis and Y-axis in the bar chart
   axisSize = width - space - space;
+  //Dividing up the axis to for the smaller lines
   gap = axisSize/10;
   
   //Drawing a menu
@@ -66,7 +76,6 @@ void draw()
   {
     case 0:
     {
-       //Trying some animation
       background(img);
       //Title
       textSize(width/20);
@@ -75,10 +84,9 @@ void draw()
       text("Pacquiao vs Marquez III", width/2 , space);
     
       //Drawing a box with text in it
-    
       stroke(255);
       fill(0);
-      rect(width/5,space*2,3*(width/5),height/2-(space*2));
+      rect(width/5,space*2,3*(width/5),height/2-(space));
     
       //Option 1
       textSize(width/31);
@@ -86,7 +94,11 @@ void draw()
       text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/4);
     
       //Option 2
-      text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/3+20);
+      text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/3+(4*smallSpace));
+      
+      //Telling user what to do
+      fill(0,255,100);
+      text("*^^ Using the keyboard ^^*\n select one of the options above", width/2, height/2+(2*smallSpace));
 
       break;
     }
@@ -94,13 +106,13 @@ void draw()
     //Draw barchart
     case 1:
     {
-      
+      //Calling the function which draw the X and Y axis
       drawingGraph();
     
       boxes();
     
       //Pac's bars
-      for(int i = 0;i<rounds;i++)
+      for(int i = 0;i < rounds;i++)
       {
         pac.x=space+((axisSize/rounds)*i);
         pac.y=space;
@@ -189,6 +201,7 @@ void drawingGraph()
     text("<----Rounds---->",width/2, height-10);
     
     textAlign(LEFT);
+    
     //Drawing the little lines on the graph
     for(int i = 0; i < 10; i++)
     {
@@ -198,12 +211,14 @@ void drawingGraph()
       numbers -= 10;
     }
     
+    //Populating the X axis
     for(int i = 0; i < rounds; i++)
     {
       text(i+1,(space/10)+space+(axisSize/rounds)*i,height-(space/2));
     }
 }
 
+//This is where you can hover over the Graph and shows the user the exact value on the bar
 void barfeature()
 {
   int lineDigit;
@@ -219,6 +234,7 @@ void barfeature()
   }
 }
 
+//User inputs
  void keyPressed()
  {
    if(keyPressed)
@@ -227,8 +243,6 @@ void barfeature()
      {
        select.rewind();
        select.play();
-       animation = 0;
-       
        input = 0;
      }
      

@@ -1,5 +1,6 @@
 class Fight
 {
+  //fields
   int jabs;
   int strong;
   int totalJabs;
@@ -19,6 +20,7 @@ class Fight
   
   //Colour for both fighters
   color corner;
+  
   int blue;
   int red;
   int green;
@@ -26,12 +28,14 @@ class Fight
   //Constructors;
   Fight()
   {
+    //This is also to avoid hard coding
     jabs = 0;
     strong = 1;
     totalJabs = 2;
     totalPower = 3;
     total = 4;
     
+    //these values are for making the 2D arrays
     dataNum = 5;
     rounds = 12;
     

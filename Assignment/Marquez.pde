@@ -1,5 +1,6 @@
 class Marquez extends Fight
 {
+  //These fields are ainly for the barchart method
   int numbers;
   int barSize;
   int i;
@@ -7,6 +8,7 @@ class Marquez extends Fight
   int position;
   float addUp;
   
+  //These are mostly for the pie chart method
   int round;
   int radius;
   int r;
@@ -19,6 +21,7 @@ class Marquez extends Fight
   
   Marquez()
   {
+    //Creating an array of colours
     blue = 255;
     red = 200;
     green = 200;
@@ -33,35 +36,43 @@ class Marquez extends Fight
     barSize = width/50;
     position = 1;
     corner = color(0,0,255);
-    //radius = 300
     radius = width/2;
     r = radius/2;
     cx = cy = width/2;
+    //startAngle is to change where the first sector in being drawn
     startAngle = (PI/2);
   }
   
+  //Bar chart method
   void bar()
   {
      fill(corner);
      rect((position*barSize)+x,height-y,barSize,-map(marqData[i][total], 0, 100, 0, graphSize));
   }
    
+  //Pie chart method
   void pie()
   {
      mouseAngleX = mouseX - cx;
      mouseAngleY = mouseY - cy;
      
+     //Finding the angle of the mouse in relation to the center of the program
      float mouseAngle = atan2(mouseAngleX, mouseAngleY);
+     
+     //If mouseAngle is negative then change it to positive
      if(mouseAngle<0)
      {
        mouseAngle = map(mouseAngle, -PI,0,PI,TWO_PI);
      }
      
+     //Total punches combining both fighters into one
      totalPunches = pacData[round][total] + marqData[round][total];
      
      last = startAngle;
      addUp = 0;
      stroke(0);
+     
+     //Drawing 4 sectors
      for(int i = 0; i<total; i++)
      {
       fill(gradient[i]);
@@ -73,20 +84,21 @@ class Marquez extends Fight
       {
         if(i == totalJabs)
         {
-          //Jabs missed
+          //Calculating jabs missed
           addUp += (marqData[round][i]-marqData[round][jabs]);
         }
         else
         {
           if(i == totalPower)
           {
-            //Power shots missed
+            //Calculating power shots missed
             addUp += (marqData[round][i]-marqData[round][strong]);
           }
          }
         }
-      float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
-      if( (mouseAngle > last+startAngle  && mouseAngle < section+startAngle ))
+        //Calculating the angle of this particular sector
+        float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
+        if( (mouseAngle > last+startAngle  && mouseAngle < section+startAngle ))
         {
           radius = radius+(radius/4);
         }
@@ -95,9 +107,11 @@ class Marquez extends Fight
           radius = width/2;
         }
       
+      //Drawing the actual sector
       arc(cx,cy,radius,radius,(TWO_PI-section),TWO_PI-last,PIE);
       last = section;
       
+      //IF the mouse is hovered over one of the sectors, display this text
       textAlign(CENTER);
       if(radius != width/2)
       {
@@ -119,16 +133,21 @@ class Marquez extends Fight
         }
        }
      }
-     
-     addUp=0;
-     last = startAngle;
-    //Inner Pie charts
+    
+    
+    //Resetting these values to draw the inner bar chart
+    addUp=0;
+    last = startAngle;
+    
+    //Inner Pie chart
     stroke(0);
     fill(corner);
     addUp = marqData[round][total];
     float section = map(addUp, 0 ,totalPunches, 0, TWO_PI)+startAngle;
     arc(cx,cy,r,r,TWO_PI-section,TWO_PI-last,PIE);
     
+    
+    //Extra details for Marq
     textAlign(LEFT);
     text("Total jabs: " + int(marqData[round][totalJabs]), 10,height-(2*space));
     text("Total PowerPunches: " + int(marqData[round][totalPower]), 10,height-((2*space)-(space/2)));
