@@ -27,12 +27,12 @@ The second advance feature is the mouse hovering over elements to get more detai
 Here are some Snapshots
 
 Menu for my program
-![Sketch](Snapshots/Menu.jpg)
+![Sketch](Snapshots/Menu.png)
 
 Bar chart
-![Sketch](Snapshots/Barchart.jpg)
+![Sketch](Snapshots/Barchart.png)
 
 Different rounds for Donut/pie cart
-![Sketch](Snapshots/PieChart1.jpg)
-![Sketch](Snapshots/PieChart2.jpg)
-![Sketch](Snapshots/PieChart3.jpg)
+![Sketch](Snapshots/PieChart1.png)
+![Sketch](Snapshots/PieChart2.png)
+![Sketch](Snapshots/PieChart3.png)
