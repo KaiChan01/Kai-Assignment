@@ -29,6 +29,8 @@ void setup()
   Pacquiao pac;
   Marquez marq;
   
+  float animation;
+  
   //To avoid hard coding when accessing the array of DATA2
   int round;
   int rounds;
@@ -60,81 +62,90 @@ void draw()
   gap = axisSize/10;
   
   //Drawing a menu
-  if(input == 0)
+  switch(input)
   {
-    background(img);
-    //Title
-    textSize(width/20);
-    fill(255,0,0);
-    textAlign(CENTER);
-    text("Pacquiao vs Marquez 3", width/2 , space);
-    
-    //Drawing a box with text in it
-    
-    stroke(255);
-    fill(0);
-    rect(width/5,space*2,3*(width/5),height/2-(space*2));
-    
-    //Option 1
-    textSize(width/31);
-    fill(255);
-    text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/4);
-    
-    //Option 2
-    text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/3+20);
-  }
-  
-  //Draw barchart
-  if(input == 1)
-  {
-    drawingGraph();
-    
-    boxes();
-    
-    //Pac's bars
-    for(int i = 0;i<rounds;i++)
+    case 0:
     {
-      pac.x=space+((axisSize/rounds)*i);
-      pac.y=space;
-      pac.i= i;
-      pac.graphSize=axisSize;
-      pac.bar();
-    }
+       //Trying some animation
+      background(img);
+      //Title
+      textSize(width/20);
+      fill(255,0,0);
+      textAlign(CENTER);
+      text("Pacquiao vs Marquez III", width/2 , space);
     
-    //Marq's bars
-    for(int i = 0; i < rounds;i++)
-    {
-      marq.x=space+((axisSize/rounds)*i);
-      marq.y=space;
-      marq.i= i;
-      marq.graphSize=axisSize;
-      marq.bar();
-    }
+      //Drawing a box with text in it
     
-    barfeature();
-  }
+      stroke(255);
+      fill(0);
+      rect(width/5,space*2,3*(width/5),height/2-(space*2));
+    
+      //Option 1
+      textSize(width/31);
+      fill(255);
+      text("1. A Barchart displaying total number \nof punches thrown by both fighters.",width/2,height/4);
+    
+      //Option 2
+      text("2. A Pie Chart showing the types of \npunches landed/thrown by both \nfighters.",width/2,height/3+20);
+
+      break;
+    }
   
-  //Draw piechart
-  if(input == 2)
-  {
-    //Display for option 2
-    textAlign(CENTER);
+    //Draw barchart
+    case 1:
+    {
+      
+      drawingGraph();
     
-    background(0);
-    fill(255);
-    text("Round", width/2, height/10);
-    text(round+1, width/2, height/10+(height/25));
-    textAlign(LEFT);
-    text("Press B for menu\n\nUse '<' and '>' key \nto change rounds",10,space/2);
+      boxes();
     
-    pac.round = round;
-    pac.pie();
+      //Pac's bars
+      for(int i = 0;i<rounds;i++)
+      {
+        pac.x=space+((axisSize/rounds)*i);
+        pac.y=space;
+        pac.i= i;
+        pac.graphSize=axisSize;
+        pac.bar();
+      }
     
-    marq.round = round;
-    marq.pie();
+      //Marq's bars
+      for(int i = 0; i < rounds;i++)
+      {
+        marq.x=space+((axisSize/rounds)*i);
+        marq.y=space;
+        marq.i= i;
+        marq.graphSize=axisSize;
+        marq.bar();
+      }
     
-    boxes();
-  }  
+      barfeature();
+      break;
+    }
+  
+    //Draw piechart
+    case 2:
+    {
+      //Display for option 2
+      textAlign(CENTER);
+    
+      background(0);
+      fill(255);
+      text("Round", width/2, height/10);
+      text(round+1, width/2, height/10+(height/25));
+      textAlign(LEFT);
+      text("Press B for menu\n\nUse '<' and '>' key \nto change rounds",10,space/2);
+    
+      pac.round = round;
+      pac.pie();
+    
+      marq.round = round;
+      marq.pie();
+      
+      boxes();
+      break;
+    }  
+  }
 }
 
 
@@ -199,7 +210,6 @@ void barfeature()
   
   if(mouseY > space && mouseY < space+axisSize)
   {
-    println(mouseY);
     stroke(200,255,200);
     fill(200,255,200);
     line(0, mouseY,width,mouseY);
@@ -208,7 +218,7 @@ void barfeature()
     text(lineDigit,width-space,mouseY);
   }
 }
- 
+
  void keyPressed()
  {
    if(keyPressed)
@@ -217,6 +227,8 @@ void barfeature()
      {
        select.rewind();
        select.play();
+       animation = 0;
+       
        input = 0;
      }
      
