@@ -21,4 +21,18 @@ after I added the classes that I didn't really need them since I had only two fi
 sense to create a class called "Fighter" and make 2 instances of "Fighter" with different data, but if i did it that way I wouldn't
 know how to display both data in a way that allows the user to look and compare both data sets at the same time (like the piechart).
 
-The second advance feature is the mouse hovering over elements to get more details. I also added sound for user inputs.
+The second advance feature is the mouse hovering over elements to get more details. I also added sound for the keypress.
+
+
+Here are some Snapshots
+
+Menu for my program
+![Sketch](Snapshots/Menu.jpg)
+
+Bar chart
+![Sketch](Snapshots/Barchart.jpg)
+
+Different rounds for Donut/pie cart
+![Sketch](Snapshots/PieChart1.jpg)
+![Sketch](Snapshots/PieChart2.jpg)
+![Sketch](Snapshots/PieChart3.jpg)
