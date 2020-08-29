@@ -1,4 +1,4 @@
-# Kai-Assignment
+# Programming Assignment (Data Graphing using Processing 2, a programming sketchbook)
 My assignment for programming.
 
 I plan to use the dataset gathered from a boxing match between Manny Pacquiao and Juan Manuel Márquez.
